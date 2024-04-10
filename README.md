@@ -14,5 +14,16 @@ Asegúrate de tener instalado lo siguiente en tu máquina:
 
 Clona el repositorio de la aplicación desde GitHub:
 
-```bash
-git clone <[url_del_repositorio](https://github.com/AndresT3009/PruebaTecnicaQuind)>
+git clone <[url_del_repositorio]([https://github.com/AndresT3009/PruebaTecnicaQuind])>
+
+## Paso 2: Configurar la Base de Datos
+spring.datasource.url=jdbc:postgresql://localhost:5433/postgres
+spring.datasource.username=prueba
+spring.datasource.password=pruebapass
+
+## Paso 3: Compilar la Aplicación
+
+## Paso 4: Ejecutar la Aplicación
+
+## Paso 5: Acceder a la Aplicación
+
