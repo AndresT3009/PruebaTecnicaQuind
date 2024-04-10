@@ -1,5 +1,6 @@
 package com.alquiler.SistemaAlquileres.controllers;
 
+import com.alquiler.SistemaAlquileres.dtos.PropiedadDTO;
 import com.alquiler.SistemaAlquileres.models.Propiedad;
 import com.alquiler.SistemaAlquileres.services.PropiedadService;
 import com.alquiler.SistemaAlquileres.services.implementations.PropiedadServiceImplementation;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api")
@@ -22,7 +24,7 @@ public class PropiedadController {
     @Autowired
     private PropiedadService propiedadService;
 
-
+/*
     @GetMapping("/propiedades")
     public List<Propiedad> obtenerPropiedades(){
         List<Propiedad> listaPropiedades = new ArrayList<>();
@@ -38,14 +40,21 @@ public class PropiedadController {
         return listaPropiedades;
     }
 
+ */
+
     private boolean esUbicacionPermitida(String ubicacion) {
-        List<String> ciudadesPermitidas = Arrays.asList("Bogotá", "Medellín", "Cali", "Cartagena");
+        List<String> ciudadesPermitidas = Arrays.asList("Bogota", "Medellin", "Cali", "Cartagena");
         String ubicacionMinusculas = ubicacion.toLowerCase(); // Convertir a minúsculas
         return ciudadesPermitidas.stream()
                 .anyMatch(ciudad -> ciudad.toLowerCase().equals(ubicacionMinusculas)); // Comparar ignorando el caso
     }
 
-    @PostMapping("/Propiedades")
+    @RequestMapping("/propiedades")
+    public List<Propiedad>obtenerPropiedad(){
+        return propiedadService.obtenerPropiedades();
+    }
+
+    @PostMapping("/propiedades")
     public ResponseEntity<Object> guardarNuevaPropiedad(@RequestParam String nombrePropiedad,@RequestParam String ubicacionPropiedad,
                                                    @RequestParam boolean propiedadDisponible, @RequestParam String urlPropiedad,
                                                    @RequestParam int precioPropiedad){
@@ -56,9 +65,28 @@ public class PropiedadController {
         }if(urlPropiedad.isEmpty()){
             return new ResponseEntity<>("url de la propiedad no puede estar vacío",HttpStatus.FORBIDDEN);
         }
+        Propiedad propiedadExistente = propiedadService.buscarPorNombre(nombrePropiedad);
+        if (propiedadExistente != null) {
+            return new ResponseEntity<>("La propiedad ya está registrada", HttpStatus.BAD_REQUEST);
+        }
         Propiedad nuevaPropiedad = new Propiedad(nombrePropiedad,ubicacionPropiedad,propiedadDisponible,urlPropiedad,precioPropiedad);
-        System.out.println(nuevaPropiedad);
         propiedadService.guardarPropiedad(nuevaPropiedad);
         return new ResponseEntity<>("Propiedad Registrada",HttpStatus.CREATED);
     }
+
+    @GetMapping("/propiedadesfiltradas")
+    public ResponseEntity<List<Propiedad>> obtenerPropiedadesPorPrecio(@RequestParam int precioMinimo, @RequestParam int precioMaximo) {
+        List<Propiedad> propiedades = propiedadService.encontrarPorPrecio(precioMinimo, precioMaximo);
+        return new ResponseEntity<>(propiedades, HttpStatus.OK);
+    }
+    @PutMapping("/propiedades")
+    public void actualizarPropiedad(@RequestBody Propiedad propiedad){
+        if(esUbicacionPermitida(propiedad.getUbicacionPropiedad())) {
+            propiedadService.actualizarPropiedad(propiedad);
+        }else{
+            System.out.println("no permitido");
+        }
+
+    }
+
 }

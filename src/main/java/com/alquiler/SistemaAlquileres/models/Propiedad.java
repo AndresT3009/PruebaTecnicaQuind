@@ -6,10 +6,13 @@ import javax.persistence.*;
 @Entity
 @Table(name = "propiedades")
 public class Propiedad {
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
+
+     */
+    @Id
     private String nombrePropiedad;
     private String ubicacionPropiedad;
     private boolean propiedadDisponible;
@@ -21,7 +24,7 @@ public class Propiedad {
     }
 
     public Propiedad(String nombrePropiedad, String ubicacionPropiedad, boolean propiedadDisponible, String urlPropiedad, Integer precioPropiedad) {
-        this.id = id;
+        //this.id = id;
         this.nombrePropiedad = nombrePropiedad;
         this.ubicacionPropiedad = ubicacionPropiedad;
         this.propiedadDisponible = propiedadDisponible;
@@ -72,7 +75,7 @@ public class Propiedad {
     @Override
     public String toString() {
         return "{" +
-                "id=" + id +
+                /*"id=" + id +*/
                 ", nombrePropiedad='" + nombrePropiedad + '\'' +
                 ", ubicacionPropiedad='" + ubicacionPropiedad + '\'' +
                 ", propiedadDisponible=" + propiedadDisponible +
