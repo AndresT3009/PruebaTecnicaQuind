@@ -1,17 +1,13 @@
 package com.alquiler.SistemaAlquileres.models;
 
-import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "propiedades")
 public class Propiedad {
-    /*@Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
-    private long id;
 
-     */
     @Id
     private String nombrePropiedad;
     private String ubicacionPropiedad;
